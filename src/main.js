@@ -1,22 +1,20 @@
-const { app, BrowserWindow, dialog, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("node:path");
 
-async function handleGetUrl(event, url) {
+function handleGetUrl(event, url) {
   console.log(url);
-  try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`Response status: ${response.status}`);
-    const text = await response.text();
-    return { success: true, data: text };
-  } catch (error) {
-    console.error(error.message);
-    return { success: false, error: error.message };
-  }
-}
-
-async function handleFileOpen() {
-  const { canceled, filePaths } = await dialog.showOpenDialog({});
-  if (!canceled) return filePaths[0];
+  return new Promise(async (resolve) => {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`Response status: ${response.status}`);
+      const data = await response.text();
+      console.log(data);
+      return resolve({ success: true, data });
+    } catch (error) {
+      console.error(error.message);
+      return resolve({ success: false, error: error.message });
+    }
+  });
 }
 
 const createWindow = () => {
@@ -33,7 +31,6 @@ const createWindow = () => {
 
 app.whenReady().then(() => {
   ipcMain.handle("get-url", handleGetUrl);
-  ipcMain.handle("dialog:openFile", handleFileOpen);
   createWindow();
 });
 
