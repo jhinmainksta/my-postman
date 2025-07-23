@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta content="default-src 'self'; script-src 'self'" />
+    <link rel="stylesheet" href="index.css" />
     <title>myPostman</title>
   </head>
   <body>
@@ -13,12 +14,22 @@
         <option value="GET" selected>GET</option>
         <option value="POST">POST</option>
         <option value="PUT">PUT</option>
+        <option value="PATCH">PATCH</option>
         <option value="DELETE">DELETE</option>
       </select>
-      <input id="url-input" type="text" placeholder="enter url" />
+      <input
+        id="url-input"
+        type="text"
+        placeholder="enter url"
+        style="width: 400px"
+      />
     </div>
+    <p>Request body</p>
+    <textarea id="request-body" rows="10" cols="100"></textarea>
     <p>Response</p>
-    <div id="response-text"></div>
+    <div id="response-status"></div>
+    <div class="scrollbar" id="response-headders"></div>
+    <div class="scrollbar" id="response-body"></div>
     <p id="info"></p>
     <script src="renderer.js"></script>
   </body>

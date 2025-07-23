@@ -3,31 +3,60 @@ document.getElementById(
 ).innerText = `This app is using Chrome (v${versions.chrome()}), Node.js (v${versions.node()}) and Electron (v${versions.electron()})`;
 
 const urlInput = document.getElementById("url-input");
-const responseText = document.getElementById("response-text");
+const statusElem = document.getElementById("response-status");
+const headersElem = document.getElementById("response-headders");
+const respBodyElem = document.getElementById("response-body");
+const methodElem = document.getElementById("method");
+const reqBodyElem = document.getElementById("request-body");
+
+function clearResponseFields() {
+  statusElem.innerText = "";
+  headersElem.innerText = "";
+  respBodyElem.innerText = "";
+  reqBodyElem.innerText = "";
+}
 
 urlInput.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
-    responseText.innerText = "Loading...";
+    clearResponseFields();
+    statusElem.innerText = "Loading...";
     const url = urlInput.value;
 
     if (url === "") {
-      responseText.innerText = "url field can't be empty";
+      statusElem.innerText = "url field can't be empty";
+      return;
+    }
+
+    const method = methodElem.value;
+
+    const bodyText = reqBodyElem.value;
+    let request = {
+      url,
+      params: {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    };
+
+    if (bodyText !== "") {
+      request.params.body = bodyText;
     }
 
     myPostmanChan
-      .getUrl(url)
-      .then((result) => {
-        if (result.success) {
-          responseText.innerText = result.data;
-        } else {
-          responseText.innerText = `Error: ${result.error}`;
-          console.error(result.error);
+      .getUrl(request)
+      .then((response) => {
+        if (response.error) statusElem.innerText = `Error: ${response.message}`;
+        else {
+          statusElem.innerText = `Status: ${response.status}\n${response.statusText}`;
+          headersElem.innerText = JSON.stringify(response.headders, null, 2);
+          respBodyElem.innerText = response.body;
         }
       })
       .catch((error) => {
         console.error("IPC communication error:", error);
-        responseText.innerText = `Communication error: ${error.message}`;
+        statusElem.innerText = `Communication error: ${error.message}`;
       });
-    console.log("magagich");
   }
 });

@@ -7,5 +7,5 @@ contextBridge.exposeInMainWorld("versions", {
 });
 
 contextBridge.exposeInMainWorld("myPostmanChan", {
-  getUrl: (url) => ipcRenderer.invoke("get-url", url),
+  getUrl: (request) => ipcRenderer.invoke("get-url", request),
 });
