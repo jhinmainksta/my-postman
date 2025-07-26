@@ -8,28 +8,41 @@
     <title>myPostman</title>
   </head>
   <body>
-    <h1>myPostman</h1>
-    <div>
-      <select id="method">
-        <option value="GET" selected>GET</option>
-        <option value="POST">POST</option>
-        <option value="PUT">PUT</option>
-        <option value="PATCH">PATCH</option>
-        <option value="DELETE">DELETE</option>
-      </select>
-      <input
-        id="url-input"
-        type="text"
-        placeholder="enter url"
-        style="width: 400px"
-      />
+    <div class="request-field">
+      <div id="request-bar" class="request-bar">
+        <select id="method" class="rb-select">
+          <option value="GET" class="color-GET" selected>GET</option>
+          <option value="POST" class="color-POST">POST</option>
+          <option value="PUT" class="color-PUT">PUT</option>
+          <option value="PATCH" class="color-PATCH">PATCH</option>
+          <option value="DELETE" class="color-DELETE">DELETE</option>
+        </select>
+        <input
+          id="url-input"
+          type="text"
+          placeholder="enter url"
+          class="rb-input"
+        />
+      </div>
+      <p>Body</p>
+      <textarea id="request-body" rows="10" cols="100"></textarea>
     </div>
-    <p>Request body</p>
-    <textarea id="request-body" rows="10" cols="100"></textarea>
-    <p>Response</p>
-    <div id="response-status"></div>
-    <div class="scrollbar" id="response-headders"></div>
-    <div class="scrollbar" id="response-body"></div>
+
+    <div class="response-field">
+      <div class="tab-buttons">
+        <div class="buttons-left">
+          <button class="tab-btn active" data-tab="response-body">Body</button>
+          <button class="tab-btn" data-tab="response-headers">Headers</button>
+        </div>
+        <div id="response-status"></div>
+      </div>
+
+      <div class="tab-contents">
+        <div class="scrollbar tab-content active" id="response-body"></div>
+        <div class="scrollbar tab-content" id="response-headers"></div>
+      </div>
+    </div>
+
     <p id="info"></p>
     <script src="renderer.js"></script>
   </body>

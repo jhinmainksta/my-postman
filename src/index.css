@@ -1,6 +1,115 @@
+body * {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  color: #333;
+  line-height: 1.5;
+}
+
 .scrollbar {
   overflow: auto;
   overflow-y: scroll;
   overflow-x: hidden;
   height: 200px;
+}
+
+.color-GET {
+  color: #6bdd9a;
+}
+
+.color-PUT {
+  color: #74aef6;
+}
+
+.color-POST {
+  color: #ffe47e;
+}
+
+.color-PATCH {
+  color: #c0a8e1;
+}
+
+.color-DELETE {
+  color: #f79a8e;
+}
+
+.request-bar {
+  display: flex;
+}
+
+.rb-select,
+.rb-input{
+  margin:0;
+  padding: 8px;
+  border: 1px solid #ccc;
+}
+
+.rb-select {
+  border-right: none;
+  border-radius: 4px 0 0 4px;
+}
+
+.rb-input {
+  border-left: none;
+  border-radius: 0 4px 4px 0;
+  width: 400px;
+}
+
+.tab-btn {
+  padding: 12px 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.tab-btn:hover {
+  background: #e9e9e9;
+}
+
+.tab-btn.active {
+  background: white;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #3498db;
+}
+
+.tab-contents {
+  background: white;
+  padding: 20px;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.tab-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.buttons-left {
+  display: flex;
+  gap: 8px; 
 }

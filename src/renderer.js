@@ -4,7 +4,7 @@ document.getElementById(
 
 const urlInput = document.getElementById("url-input");
 const statusElem = document.getElementById("response-status");
-const headersElem = document.getElementById("response-headders");
+const headersElem = document.getElementById("response-headers");
 const respBodyElem = document.getElementById("response-body");
 const methodElem = document.getElementById("method");
 const reqBodyElem = document.getElementById("request-body");
@@ -41,7 +41,9 @@ urlInput.addEventListener("keypress", (e) => {
     };
 
     if (bodyText !== "") {
-      request.params.body = bodyText;
+      try {
+        request.params.body = JSON.parse(bodyText);
+      } catch (error) {}
     }
 
     myPostmanChan
@@ -59,4 +61,22 @@ urlInput.addEventListener("keypress", (e) => {
         statusElem.innerText = `Communication error: ${error.message}`;
       });
   }
+});
+
+const tabButtons = document.querySelectorAll(".tab-btn");
+
+tabButtons.forEach((button) => {
+  button.addEventListener("click", function () {
+    document
+      .querySelectorAll(".tab-btn")
+      .forEach((btn) => btn.classList.remove("active"));
+    document
+      .querySelectorAll(".tab-content")
+      .forEach((content) => content.classList.remove("active"));
+
+    this.classList.add("active");
+
+    const tabId = this.getAttribute("data-tab");
+    document.getElementById(tabId).classList.add("active");
+  });
 });
