@@ -1,8 +1,21 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
 body * {
   font-family: Arial, sans-serif;
   font-size: 16px;
   color: #333;
   line-height: 1.5;
+}
+
+body {
+  margin: 20px;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .scrollbar {
@@ -112,4 +125,21 @@ body * {
 .buttons-left {
   display: flex;
   gap: 8px; 
+}
+
+.resizer {
+  height: 3px;
+  width: 100%;
+  cursor: row-resize;
+  bottom: 0;
+  position: absolute;
+  background-color: #42b362;
+}
+
+.cover {
+  height: 400px;
+  width: 100%;
+  position: relative;
+  overflow-x: hidden;
+  background-color: #ccc;
 }

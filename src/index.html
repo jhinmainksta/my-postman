@@ -8,24 +8,27 @@
     <title>myPostman</title>
   </head>
   <body>
-    <div class="request-field">
-      <div id="request-bar" class="request-bar">
-        <select id="method" class="rb-select">
-          <option value="GET" class="color-GET" selected>GET</option>
-          <option value="POST" class="color-POST">POST</option>
-          <option value="PUT" class="color-PUT">PUT</option>
-          <option value="PATCH" class="color-PATCH">PATCH</option>
-          <option value="DELETE" class="color-DELETE">DELETE</option>
-        </select>
-        <input
-          id="url-input"
-          type="text"
-          placeholder="enter url"
-          class="rb-input"
-        />
+    <div class="cover">
+      <div class="request-field">
+        <div id="request-bar" class="request-bar">
+          <select id="method" class="rb-select">
+            <option value="GET" class="color-GET" selected>GET</option>
+            <option value="POST" class="color-POST">POST</option>
+            <option value="PUT" class="color-PUT">PUT</option>
+            <option value="PATCH" class="color-PATCH">PATCH</option>
+            <option value="DELETE" class="color-DELETE">DELETE</option>
+          </select>
+          <input
+            id="url-input"
+            type="text"
+            placeholder="enter url"
+            class="rb-input"
+          />
+        </div>
+        <p>Body</p>
+        <textarea id="request-body" rows="10" cols="100"></textarea>
       </div>
-      <p>Body</p>
-      <textarea id="request-body" rows="10" cols="100"></textarea>
+      <div class="resizer"></div>
     </div>
 
     <div class="response-field">
@@ -45,5 +48,6 @@
 
     <p id="info"></p>
     <script src="renderer.js"></script>
+    <script src="resizer.js"></script>
   </body>
 </html>
