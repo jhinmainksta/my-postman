@@ -108,27 +108,30 @@ body {
   position: relative;
   height: 100%;
   flex: 1;
-
-  background-color: bisque;
 }
 
 .tab-content {
   padding: 10px;
   display: none;
   overflow-y: auto;
-
-  background-color: aquamarine;
 }
 
 .resizer {
-  height: 3px;
+  height: 5px;
   width: 100%;
   cursor: row-resize;
   bottom: 0;
   position: absolute;
 
-  background-color: #2c3e50;
+  background: linear-gradient(
+    to bottom,
+    transparent 2px,    /* Top 2px transparent */
+    #333 2px,            /* 3rd pixel = red */
+    #333 3px,            /* End red at 3px */
+    transparent 3px     /* Rest transparent */
+  );
 }
+
 
 .cover {
   user-select: none;
@@ -139,8 +142,6 @@ body {
   width: 100%;
   position: relative;
   overflow-x: hidden;
-
-  background-color: #ccc;
 }
 
 .request-field {
@@ -149,8 +150,6 @@ body {
   margin: 10px;
   flex: 1;
   flex-direction: column;
-
-  background-color:  #3498db;
 }
 
 .body-text {
@@ -163,13 +162,9 @@ body {
   display: flex;
   overflow: hidden;
   flex-direction: column;
-
-  background-color: aliceblue;
 }
 
 .info-p {
   height: 25px;
   flex: 0 0 auto;
-
-  background-color: darkgrey;
 }
