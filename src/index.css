@@ -173,23 +173,3 @@ body {
 
   background-color: darkgrey;
 }
-
-.color-GET {
-  color: #6bdd9a;
-}
-
-.color-PUT {
-  color: #74aef6;
-}
-
-.color-POST {
-  color: #ffe47e;
-}
-
-.color-PATCH {
-  color: #c0a8e1;
-}
-
-.color-DELETE {
-  color: #f79a8e;
-}
