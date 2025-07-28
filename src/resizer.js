@@ -26,7 +26,7 @@ function initResizeFn() {
 
     var maxh = parseInt(document.body.clientHeight);
 
-    if (ch > 200 && maxh - ch > 200) {
+    if (ch > 150 && maxh - ch > 150) {
       cover.style.height = `${ch}px`;
     }
   }
