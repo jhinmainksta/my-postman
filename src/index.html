@@ -5,6 +5,7 @@
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta content="default-src 'self'; script-src 'self'" />
     <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="method-colors.css" />
     <title>myPostman</title>
   </head>
   <body>
@@ -26,8 +27,9 @@
           />
         </div>
         <p>Body</p>
-        <textarea id="request-body" rows="10" cols="100"></textarea>
+        <textarea class="body-text" id="request-body"></textarea>
       </div>
+
       <div class="resizer"></div>
     </div>
 
@@ -46,7 +48,7 @@
       </div>
     </div>
 
-    <p id="info"></p>
+    <p class="info-p" id="info"></p>
     <script src="renderer.js"></script>
     <script src="resizer.js"></script>
   </body>

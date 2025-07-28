@@ -1,48 +1,33 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
-body * {
+body {
   font-family: Arial, sans-serif;
   font-size: 16px;
   color: #333;
   line-height: 1.5;
 }
 
-body {
-  margin: 20px;
+body, html {
   width: 100%;
   height: 100%;
-  box-sizing: border-box;
-  overflow-x: hidden;
+  overflow: hidden;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
 .scrollbar {
   overflow: auto;
   overflow-y: scroll;
   overflow-x: hidden;
-  height: 200px;
-}
-
-.color-GET {
-  color: #6bdd9a;
-}
-
-.color-PUT {
-  color: #74aef6;
-}
-
-.color-POST {
-  color: #ffe47e;
-}
-
-.color-PATCH {
-  color: #c0a8e1;
-}
-
-.color-DELETE {
-  color: #f79a8e;
+  height: 100%;
 }
 
 .request-bar {
@@ -97,15 +82,6 @@ body {
   background: #3498db;
 }
 
-.tab-contents {
-  background: white;
-  padding: 20px;
-}
-
-.tab-content {
-  display: none;
-}
-
 .tab-content.active {
   display: block;
   animation: fadeIn 0.5s ease;
@@ -127,19 +103,93 @@ body {
   gap: 8px; 
 }
 
+.tab-contents {
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+  flex: 1;
+
+  background-color: bisque;
+}
+
+.tab-content {
+  padding: 10px;
+  display: none;
+  overflow-y: auto;
+
+  background-color: aquamarine;
+}
+
 .resizer {
   height: 3px;
   width: 100%;
   cursor: row-resize;
   bottom: 0;
   position: absolute;
-  background-color: #42b362;
+
+  background-color: #2c3e50;
 }
 
 .cover {
-  height: 400px;
+  user-select: none;
+  height: 200px;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   position: relative;
   overflow-x: hidden;
+
   background-color: #ccc;
+}
+
+.request-field {
+  display: flex;
+  position: relative;
+  margin: 10px;
+  flex: 1;
+  flex-direction: column;
+
+  background-color:  #3498db;
+}
+
+.body-text {
+  resize: none;
+}
+
+.response-field {
+  user-select: none;
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+
+  background-color: aliceblue;
+}
+
+.info-p {
+  height: 25px;
+  flex: 0 0 auto;
+
+  background-color: darkgrey;
+}
+
+.color-GET {
+  color: #6bdd9a;
+}
+
+.color-PUT {
+  color: #74aef6;
+}
+
+.color-POST {
+  color: #ffe47e;
+}
+
+.color-PATCH {
+  color: #c0a8e1;
+}
+
+.color-DELETE {
+  color: #f79a8e;
 }

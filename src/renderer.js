@@ -51,7 +51,7 @@ urlInput.addEventListener("keypress", (e) => {
       .then((response) => {
         if (response.error) statusElem.innerText = `Error: ${response.message}`;
         else {
-          statusElem.innerText = `Status: ${response.status}\n${response.statusText}`;
+          statusElem.innerText = `Status: ${response.status} Message:${response.statusText}`;
           headersElem.innerText = JSON.stringify(response.headders, null, 2);
           respBodyElem.innerText = response.body;
         }
