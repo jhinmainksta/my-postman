@@ -1,5 +1,9 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog } = require("electron");
+const fs = require("fs");
 const path = require("node:path");
+
+let mainWindow;
+let createFileWindow;
 
 function handleGetUrl(event, request) {
   return new Promise(async (resolve) => {
@@ -23,16 +27,48 @@ function handleGetUrl(event, request) {
   });
 }
 
-const createWindow = () => {
-  const win = new BrowserWindow({
-    width: 1200,
-    height: 1000,
+ipcMain.handle("open-directory-dialog", async () => {
+  const result = await dialog.showOpenDialog({
+    properties: ["openDirectory"],
+  });
+  return result.filePaths[0] || null;
+});
+
+ipcMain.handle("open-create-collection-window", () => {
+  if (createFileWindow) {
+    createFileWindow.focus();
+    return;
+  }
+
+  createFileWindow = new BrowserWindow({
+    width: 400,
+    height: 300,
+    parent: mainWindow,
+    modal: true,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, "preloadCollectionCreationWindow.js"),
     },
   });
 
-  win.loadFile("src/index.html");
+  createFileWindow.loadFile("src/create-collection.html");
+
+  createFileWindow.on("closed", () => {
+    createFileWindow = null;
+  });
+});
+
+const createWindow = () => {
+  mainWindow = new BrowserWindow({
+    width: 1200,
+    height: 1000,
+    webPreferences: {
+      preload: path.join(__dirname, "preloadMainWindow.js"),
+    },
+  });
+
+  mainWindow.loadFile("src/index.html");
 };
 
 app.whenReady().then(() => {

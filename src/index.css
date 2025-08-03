@@ -19,15 +19,21 @@ body, html {
 
 body {
   display: flex;
-  flex-direction: column;
-  height: 100vh;
+  flex-direction: row;
 }
 
-.scrollbar {
-  overflow: auto;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  height: 100%;
+.http-request {
+  display: flex;
+  width: calc(100% - 300px);
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.side-bar {
+  min-width:300px;
+  height: 100hv;
+  border-right: 1px solid #333;
+  background-color: antiquewhite;
 }
 
 .request-bar {
@@ -104,16 +110,19 @@ body {
 }
 
 .tab-contents {
-  overflow: hidden;
+  overflow-x: hidden;
   position: relative;
-  height: 100%;
   flex: 1;
+  width: 100%;
 }
 
 .tab-content {
   padding: 10px;
   display: none;
-  overflow-y: auto;
+  overflow: auto;
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .resizer {
@@ -162,9 +171,14 @@ body {
   display: flex;
   overflow: hidden;
   flex-direction: column;
+  max-width: 100%;
 }
 
 .info-p {
   font-size: 12px;
   flex: 0 0 auto;
+}
+
+.response-status {
+  padding-right: 8px;
 }

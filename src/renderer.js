@@ -80,3 +80,9 @@ tabButtons.forEach((button) => {
     document.getElementById(tabId).classList.add("active");
   });
 });
+
+const col_create_btn = document.getElementById("col-create-btn");
+
+col_create_btn.addEventListener("click", () => {
+  myPostmanChan.openCreateFileWindow();
+});

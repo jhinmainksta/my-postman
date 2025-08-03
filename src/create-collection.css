@@ -1,0 +1,15 @@
+.sas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dirname-field {
+  display: flex;
+  width: 100%;
+  gap: 10px;
+}
+
+.dirname-input {
+  flex: 1;
+}

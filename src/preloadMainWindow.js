@@ -8,4 +8,6 @@ contextBridge.exposeInMainWorld("versions", {
 
 contextBridge.exposeInMainWorld("myPostmanChan", {
   getUrl: (request) => ipcRenderer.invoke("get-url", request),
+  openCreateFileWindow: () =>
+    ipcRenderer.invoke("open-create-collection-window"),
 });
