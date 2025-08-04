@@ -6,7 +6,7 @@ contextBridge.exposeInMainWorld("versions", {
   electron: () => process.versions.electron,
 });
 
-contextBridge.exposeInMainWorld("myPostmanChan", {
+contextBridge.exposeInMainWorld("appToMain", {
   getUrl: (request) => ipcRenderer.invoke("get-url", request),
   openCreateFileWindow: () =>
     ipcRenderer.invoke("open-create-collection-window"),

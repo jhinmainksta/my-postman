@@ -2,10 +2,14 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta content="default-src 'self'; script-src 'self'" />
-    <link rel="stylesheet" href="index.css" />
+
+    <link rel="stylesheet" href="app.css" />
     <link rel="stylesheet" href="method-colors.css" />
+
+    <script src="app.js"></script>
+    <script src="resizer.js"></script>
+
     <title>myPostman</title>
   </head>
   <body>
@@ -36,7 +40,7 @@
           <textarea class="body-text" id="request-body"></textarea>
         </div>
 
-        <div class="resizer"></div>
+        <div class="resizer" data-cover_min="150" data-outer_min="300"></div>
       </div>
 
       <div class="response-field">
@@ -57,9 +61,5 @@
       </div>
       <p class="info-p" id="info"></p>
     </div>
-
-    <script src="renderer.js"></script>
-    <script src="resizer.js"></script>
-    <script src="collectionsManager.js"></script>
   </body>
 </html>
