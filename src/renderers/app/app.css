@@ -30,12 +30,33 @@ body {
 }
 
 .side-bar {
-  min-width:300px;
+  min-width: 300px;
+  max-width: 300px;
+  position: relative;
   height: 100hv;
   border-right: 1px solid #333;
   background-color: antiquewhite;
 }
 
+.side-bar-buttons {
+  width: 100%;
+  height: 25px;
+  background-color: aliceblue;
+}
+
+.side-bar-content {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.collection {
+  padding: 5px;
+  height: 28;
+  overflow:hidden;
+  text-overflow: ellipsis;
+  align-content: center;
+}
 .request-bar {
   display: flex;
   padding-bottom: 8px;

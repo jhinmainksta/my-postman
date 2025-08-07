@@ -1,5 +1,7 @@
 const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const path = require("node:path");
+const fs = require("node:fs/promises");
+const Swal = require("sweetalert2");
 
 let appWindow;
 let collectionWindow;
@@ -69,6 +71,39 @@ function openCreateCollectionWindowHandler() {
   });
 }
 
+function submitCreateCollectionHandler(event, collectionData) {
+  collectionData.path += `\\${collectionData.filename}`;
+
+  return new Promise(async (resolve) => {
+    try {
+      await fs.mkdir(`${collectionData.path}`);
+      await fs.appendFile(
+        `${collectionData.path}\\${collectionData.filename}.json`,
+        JSON.stringify(
+          {
+            version: "1",
+            name: collectionData.filename,
+            type: "collection",
+            ignore: ["node_modules", ".git"],
+          },
+          null,
+          2
+        )
+      );
+      appWindow.webContents.send("create-collection", collectionData);
+      resolve(true);
+    } catch (error) {
+      dialog.showMessageBoxSync({
+        type: "info",
+        title: "Create collection error",
+        message: error.message,
+        buttons: ["OK"],
+      });
+      resolve(false);
+    }
+  });
+}
+
 async function openDirectoryDialogHandler() {
   const result = await dialog.showOpenDialog({
     properties: ["openDirectory"],
@@ -83,6 +118,7 @@ app.whenReady().then(() => {
     "open-create-collection-window",
     openCreateCollectionWindowHandler
   );
+  ipcMain.handle("submit-create", submitCreateCollectionHandler);
 
   createAppWindow();
 });

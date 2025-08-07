@@ -8,6 +8,10 @@ contextBridge.exposeInMainWorld("versions", {
 
 contextBridge.exposeInMainWorld("appToMain", {
   getUrl: (request) => ipcRenderer.invoke("get-url", request),
-  openCreateFileWindow: () =>
+  openCreateCollectionWindow: () =>
     ipcRenderer.invoke("open-create-collection-window"),
+  onCreateCollection: (callback) =>
+    ipcRenderer.on("create-collection", (_event, collectionData) =>
+      callback(collectionData)
+    ),
 });

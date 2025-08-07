@@ -3,12 +3,13 @@ document.addEventListener("DOMContentLoaded", () => {
     "info"
   ).innerText = `This app is using Chrome (v${versions.chrome()}), Node.js (v${versions.node()}) and Electron (v${versions.electron()})`;
 
-  const urlInput = document.getElementById("url-input");
+  const urlInputElem = document.getElementById("url-input");
   const statusElem = document.getElementById("response-status");
   const headersElem = document.getElementById("response-headers");
   const respBodyElem = document.getElementById("response-body");
   const methodElem = document.getElementById("method");
   const reqBodyElem = document.getElementById("request-body");
+  const sideBarContentElem = document.getElementById("side-bar-content");
 
   function clearResponseFields() {
     statusElem.innerText = "";
@@ -17,11 +18,11 @@ document.addEventListener("DOMContentLoaded", () => {
     reqBodyElem.innerText = "";
   }
 
-  urlInput.addEventListener("keypress", (e) => {
+  urlInputElem.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
       clearResponseFields();
       statusElem.innerText = "Loading...";
-      const url = urlInput.value;
+      const url = urlInputElem.value;
 
       if (url === "") {
         statusElem.innerText = "url field can't be empty";
@@ -86,6 +87,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const col_create_btn = document.getElementById("col-create-btn");
 
   col_create_btn.addEventListener("click", () => {
-    appToMain.openCreateFileWindow();
+    appToMain.openCreateCollectionWindow();
+  });
+
+  window.appToMain.onCreateCollection((collectionData) => {
+    sideBarContentElem.innerHTML += `<div class="collection" data-path="${collectionData.path}">${collectionData.filename}</div>`;
   });
 });
