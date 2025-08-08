@@ -12,13 +12,14 @@ document.addEventListener("DOMContentLoaded", () => {
     if (path.value === "" || filenameField.value === "") {
       console.log("empty fields");
     } else {
-      let collectionData = {
-        filename: filenameField.value,
-        path: path.value,
-      };
-      createCollectionToMain.submitCreate(collectionData).then((success) => {
-        if (success) window.close();
-      });
+      createCollectionToMain
+        .submitCreate({
+          collectionName: filenameField.value,
+          path: path.value,
+        })
+        .then((success) => {
+          if (success) window.close();
+        });
     }
   });
 });

@@ -84,13 +84,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  const col_create_btn = document.getElementById("col-create-btn");
-
-  col_create_btn.addEventListener("click", () => {
+  document.getElementById("col-create-btn").addEventListener("click", () => {
     appToMain.openCreateCollectionWindow();
   });
 
+  document.getElementById("col-open-btn").addEventListener("click", () => {
+    appToMain.callOpenCollection().then((result) => {
+      if (result)
+        sideBarContentElem.innerHTML += `<div class="collection" data-path="${result.path}">${result.collectionName}</div>`;
+    });
+  });
+
   window.appToMain.onCreateCollection((collectionData) => {
-    sideBarContentElem.innerHTML += `<div class="collection" data-path="${collectionData.path}">${collectionData.filename}</div>`;
+    sideBarContentElem.innerHTML += `<div class="collection" data-path="${collectionData.path}">${collectionData.collectionName}</div>`;
   });
 });

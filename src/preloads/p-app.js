@@ -14,4 +14,6 @@ contextBridge.exposeInMainWorld("appToMain", {
     ipcRenderer.on("create-collection", (_event, collectionData) =>
       callback(collectionData)
     ),
+  callOpenCollection: (collectionData) =>
+    ipcRenderer.invoke("call-open-collection", collectionData),
 });

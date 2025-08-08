@@ -72,17 +72,17 @@ function openCreateCollectionWindowHandler() {
 }
 
 function submitCreateCollectionHandler(event, collectionData) {
-  collectionData.path += `\\${collectionData.filename}`;
+  collectionData.path += `\\${collectionData.collectionName}`;
 
   return new Promise(async (resolve) => {
     try {
       await fs.mkdir(`${collectionData.path}`);
       await fs.appendFile(
-        `${collectionData.path}\\${collectionData.filename}.json`,
+        `${collectionData.path}\\${collectionData.collectionName}.json`,
         JSON.stringify(
           {
             version: "1",
-            name: collectionData.filename,
+            name: collectionData.collectionName,
             type: "collection",
             ignore: ["node_modules", ".git"],
           },
@@ -111,6 +111,53 @@ async function openDirectoryDialogHandler() {
   return result.filePaths[0] || null;
 }
 
+function callOpenCollectionHandler() {
+  return new Promise(async (resolve) => {
+    try {
+      const result = await dialog.showOpenDialog({
+        properties: ["openDirectory"],
+      });
+
+      if (result.canceled) {
+        resolve(null);
+        return;
+      }
+      const collectionPath = result.filePaths[0];
+      const collectionDir = collectionPath.match(/[^\\]*$/)[0];
+      const configcollectionName =
+        collectionPath + "\\" + collectionDir + ".json";
+
+      const content = await fs.readFile(configcollectionName, {
+        encoding: "utf8",
+      });
+      const collectionName = JSON.parse(content)["name"];
+
+      if (!collectionName) {
+        dialog.showMessageBoxSync({
+          type: "info",
+          title: "Open collection error",
+          message: "wrong format of collection config file",
+          buttons: ["OK"],
+        });
+        resolve(null);
+      } else resolve({ collectionName, path: collectionPath });
+    } catch (error) {
+      let message = error.message;
+      if (error.code === "ENOENT") message = "not a collection directory";
+
+      dialog.showMessageBoxSync({
+        type: "info",
+        title: "Open collection error",
+        message: message,
+        buttons: ["OK"],
+      });
+      resolve(null);
+    }
+
+    resolve(null);
+  });
+}
+
 app.whenReady().then(() => {
   ipcMain.handle("get-url", getUrlHandler);
   ipcMain.handle("open-directory-dialog", openDirectoryDialogHandler);
@@ -118,6 +165,7 @@ app.whenReady().then(() => {
     "open-create-collection-window",
     openCreateCollectionWindowHandler
   );
+  ipcMain.handle("call-open-collection", callOpenCollectionHandler);
   ipcMain.handle("submit-create", submitCreateCollectionHandler);
 
   createAppWindow();
