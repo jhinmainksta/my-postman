@@ -76,21 +76,18 @@ function submitCreateCollectionHandler(event, collectionData) {
 
   return new Promise(async (resolve) => {
     try {
+      const collection = {
+        name: collectionData.collectionName,
+        type: "collection",
+        ignore: ["node_modules", ".git"],
+      };
+
       await fs.mkdir(`${collectionData.path}`);
       await fs.appendFile(
         `${collectionData.path}\\${collectionData.collectionName}.json`,
-        JSON.stringify(
-          {
-            version: "1",
-            name: collectionData.collectionName,
-            type: "collection",
-            ignore: ["node_modules", ".git"],
-          },
-          null,
-          2
-        )
+        JSON.stringify(collection, null, 2)
       );
-      appWindow.webContents.send("create-collection", collectionData);
+      appWindow.webContents.send("create-collection", collection);
       resolve(true);
     } catch (error) {
       dialog.showMessageBoxSync({
@@ -122,39 +119,76 @@ function callOpenCollectionHandler() {
         resolve(null);
         return;
       }
-      const collectionPath = result.filePaths[0];
-      const collectionDir = collectionPath.match(/[^\\]*$/)[0];
-      const configcollectionName =
-        collectionPath + "\\" + collectionDir + ".json";
 
-      const content = await fs.readFile(configcollectionName, {
+      const collectionDir = result.filePaths[0];
+      const collectionConfigPath = getConfigPath(collectionDir);
+      const content = await fs.readFile(collectionConfigPath, {
         encoding: "utf8",
       });
-      const collectionName = JSON.parse(content)["name"];
 
-      if (!collectionName) {
-        dialog.showMessageBoxSync({
-          type: "info",
-          title: "Open collection error",
-          message: "wrong format of collection config file",
-          buttons: ["OK"],
-        });
+      const collectionObj = await JSON.parse(content);
+
+      if (!collectionObj.name || !collectionObj.type) {
+        alert("wrong config format");
         resolve(null);
-      } else resolve({ collectionName, path: collectionPath });
+        return;
+      }
+
+      collectionObj.childs = await gatherChilds(collectionDir);
+
+      resolve(collectionObj);
     } catch (error) {
       let message = error.message;
       if (error.code === "ENOENT") message = "not a collection directory";
-
-      dialog.showMessageBoxSync({
-        type: "info",
-        title: "Open collection error",
-        message: message,
-        buttons: ["OK"],
-      });
+      alert(message);
       resolve(null);
     }
+  });
+}
 
-    resolve(null);
+async function gatherChilds(dir) {
+  const childs = [];
+  const files = await fs.readdir(dir);
+  const configName = getFileNameFromPath(dir) + ".json";
+
+  for (const file of files) {
+    const filePath = dir + "\\" + file;
+    if (file === configName) continue;
+    try {
+      if (!(await fs.stat(filePath)).isDirectory()) {
+        const content = await fs.readFile(filePath);
+        const fileObj = JSON.parse(content);
+        fileObj.path = filePath;
+        childs.push(fileObj);
+      } else {
+        const folderPath = filePath + "\\" + file + ".json";
+        const content = await fs.readFile(folderPath);
+        const folderObj = JSON.parse(content);
+        folderObj.path = folderPath;
+        folderObj.childs = await gatherChilds(filePath);
+        childs.push(folderObj);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+  return childs;
+}
+
+function getFileNameFromPath(path) {
+  return path.match(/[^\\]*$/)[0];
+}
+
+function getConfigPath(path) {
+  return path + "\\" + getFileNameFromPath(path) + ".json";
+}
+
+function alert(message) {
+  dialog.showMessageBoxSync({
+    type: "info",
+    title: "Open collection error",
+    message: message,
+    buttons: ["OK"],
   });
 }
 

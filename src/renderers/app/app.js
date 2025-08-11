@@ -1,8 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById(
-    "info"
-  ).innerText = `This app is using Chrome (v${versions.chrome()}), Node.js (v${versions.node()}) and Electron (v${versions.electron()})`;
-
   const urlInputElem = document.getElementById("url-input");
   const statusElem = document.getElementById("response-status");
   const headersElem = document.getElementById("response-headers");
@@ -88,14 +84,56 @@ document.addEventListener("DOMContentLoaded", () => {
     appToMain.openCreateCollectionWindow();
   });
 
+  function renderCollection(node, parentElement) {
+    if (!node) return;
+    const element = document.createElement("div");
+    element.className = node.type;
+
+    const nameContainer = document.createElement("div");
+    nameContainer.className = "name-container";
+    nameContainer.textContent = node.name;
+    element.appendChild(nameContainer);
+
+    const menuDots = document.createElement("div");
+    menuDots.className = "menu-dots";
+    menuDots.innerHTML = " ⋮ ";
+    menuDots.addEventListener("click", () => {
+      console.log("Da nevedomo mne");
+    });
+    element.appendChild(menuDots);
+
+    if (node.type === "folder" || node.type === "collection") {
+      element.addEventListener("click", (e) => {
+        if (!e.target.classList.contains("menu-dots"));
+        element.classList.toggle("open");
+      });
+
+      if (node.childs) {
+        const childContainer = document.createElement("div");
+        childContainer.className = "childs";
+
+        node.childs.forEach((child) => {
+          renderCollection(child, childContainer);
+        });
+        parentElement.appendChild(element);
+        parentElement.appendChild(childContainer);
+      } else {
+        parentElement.appendChild(element);
+      }
+    } else {
+      parentElement.appendChild(element);
+    }
+  }
+
   document.getElementById("col-open-btn").addEventListener("click", () => {
-    appToMain.callOpenCollection().then((result) => {
-      if (result)
-        sideBarContentElem.innerHTML += `<div class="collection" data-path="${result.path}">${result.collectionName}</div>`;
+    appToMain.callOpenCollection().then((collection) => {
+      console.log(collection);
+      renderCollection(collection, sideBarContentElem);
     });
   });
 
-  window.appToMain.onCreateCollection((collectionData) => {
-    sideBarContentElem.innerHTML += `<div class="collection" data-path="${collectionData.path}">${collectionData.collectionName}</div>`;
+  window.appToMain.onCreateCollection((collection) => {
+    console.log(collection);
+    renderCollection(collection, sideBarContentElem);
   });
 });
