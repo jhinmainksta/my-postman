@@ -9,17 +9,14 @@ body {
   font-size: 16px;
   color: #333;
   line-height: 1.5;
+  display: flex;
+  flex-direction: row;
 }
 
 body, html {
   width: 100%;
   height: 100%;
   overflow: hidden;
-}
-
-body {
-  display: flex;
-  flex-direction: row;
 }
 
 .http-request {
@@ -34,6 +31,7 @@ body {
   max-width: 300px;
   position: relative;
   height: 100vh;
+  user-select: none;
   border-right: 1px solid #333;
   background-color: antiquewhite;
   display: flex;
@@ -57,86 +55,6 @@ body {
   flex-direction: column;
   overflow-y: auto;
   flex: 1;
-}
-
-.childs {
-  display: none;
-  margin-left: 10px;
-}
-
-.open + .childs {
-  display: block;
-}
-
-.menu-dots {
-  flex-shrink: 0;
-  cursor: pointer;
-  padding: 2px 6px;
-  user-select: none;
-  opacity: 0;
-  transition: all 0.2s ease;
-  color: #666;
-}
-
-.name-container {
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  align-items: center;
-  min-width: 0;
-  cursor: default;
-}
-
-.collection:hover .menu-dots,
-.folder:hover .menu-dots,
-.request:hover .menu-dots {
-  opacity: 1;
-}
-
-.collection, .folder, .request {
-  margin-left: 15px;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  transition: all 0.2s ease;
-}
-
-.collection:hover,
-.folder:hover,
-.request:hover {
-  background-color: #f5f5f5;
-}
-
-.collection::before,
-.folder::before {
-  content: "📁 ";
-  flex-shrink: 0;
-  margin-right: 4px;
-  transition: transform 0.2s ease;
-}
-
-.collection:hover::before,
-.folder:hover::before {
-  transform: scale(1.1);
-}
-
-.collection.open::before,
-.folder.open::before {
-  content: "📂 ";
-  flex-shrink: 0;
-  margin-right: 4px;
-}
-
-.request::before {
-  content: '📄 ';
-  flex-shrink: 0;
-  margin-right: 4px;
-  transition: transform 0.2s ease;
-}
-
-.request:hover::before {
-  transform: scale(1.1);
 }
 
 .element:hover {

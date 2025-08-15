@@ -10,4 +10,7 @@ contextBridge.exposeInMainWorld("appToMain", {
     ),
   callOpenCollection: (collectionData) =>
     ipcRenderer.invoke("call-open-collection", collectionData),
+
+  openCreateFolderWindow: (path, type) =>
+    ipcRenderer.invoke("open-create-folder-window", path, type),
 });

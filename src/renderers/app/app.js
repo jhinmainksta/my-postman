@@ -6,6 +6,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const methodElem = document.getElementById("method");
   const reqBodyElem = document.getElementById("request-body");
   const sideBarContentElem = document.getElementById("side-bar-content");
+  let currentDropdown = null;
+
+  document.addEventListener("click", (e) => {
+    if (currentDropdown && !e.target.closest(".menu-dots")) {
+      currentDropdown.classList.remove("show");
+      currentDropdown = null;
+    }
+  });
 
   function clearResponseFields() {
     statusElem.innerText = "";
@@ -84,46 +92,100 @@ document.addEventListener("DOMContentLoaded", () => {
     appToMain.openCreateCollectionWindow();
   });
 
-  function renderCollection(node, parentElement) {
-    if (!node) return;
-    const element = document.createElement("div");
-    element.className = node.type;
+  function renderDropdownMenu(node) {
+    const dropdown = document.createElement("div");
+    dropdown.className = "dropdown";
 
-    const nameContainer = document.createElement("div");
-    nameContainer.className = "name-container";
-    nameContainer.textContent = node.name;
-    element.appendChild(nameContainer);
-
-    const menuDots = document.createElement("div");
-    menuDots.className = "menu-dots";
-    menuDots.innerHTML = " ⋮ ";
-    menuDots.addEventListener("click", () => {
-      console.log("Da nevedomo mne");
-    });
-    element.appendChild(menuDots);
-
-    if (node.type === "folder" || node.type === "collection") {
-      element.addEventListener("click", (e) => {
-        if (!e.target.classList.contains("menu-dots"));
-        element.classList.toggle("open");
+    if (node.type === "collection") {
+      const element = document.createElement("div");
+      element.innerHTML = "create folder";
+      element.className = "dropdown-item";
+      element.addEventListener("click", () => {
+        appToMain.openCreateFolderWindow(node.path, "folder");
+        dropdown.classList.remove("show");
       });
 
-      if (node.childs) {
-        const childContainer = document.createElement("div");
-        childContainer.className = "childs";
+      dropdown.appendChild(element);
 
-        node.childs.forEach((child) => {
-          renderCollection(child, childContainer);
-        });
-        parentElement.appendChild(element);
-        parentElement.appendChild(childContainer);
-      } else {
-        parentElement.appendChild(element);
-      }
+      const element2 = document.createElement("div");
+      element2.innerHTML = "create request";
+      element2.className = "dropdown-item";
+      element.addEventListener("click", () => {
+        console.log("called request creation");
+        dropdown.classList.remove("show");
+      });
+
+      dropdown.appendChild(element2);
     } else {
-      parentElement.appendChild(element);
+      const element = document.createElement("div");
+      element.innerHTML = "sosal?";
+      element.className = "dropdown-item";
+      element.addEventListener("click", () => {
+        console.log("amogus");
+        dropdown.classList.remove("show");
+      });
+
+      dropdown.appendChild(element);
+    }
+    return dropdown;
+  }
+
+  function renderCollection(node, parent, depth = 0) {
+    if (!node) return;
+
+    const item = document.createElement("div");
+    item.className = "item";
+
+    const icon = document.createElement("span");
+    icon.className = `${node.type}-icon icon`;
+    item.appendChild(icon);
+
+    const name = document.createElement("span");
+    name.className = "name";
+    name.textContent = node.name;
+    item.appendChild(name);
+
+    const menu = document.createElement("span");
+    menu.className = "menu";
+    menu.textContent = "⋮";
+
+    const dropdown = renderDropdownMenu(node);
+    menu.appendChild(dropdown);
+
+    menu.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (currentDropdown) currentDropdown.classList.remove("show");
+      dropdown.classList.toggle("show");
+      currentDropdown = dropdown;
+    });
+
+    item.appendChild(menu);
+
+    if (node.type === "folder" || node.type === "collection") {
+      icon.addEventListener("click", () => {
+        item.classList.toggle("open");
+      });
+
+      const childs = document.createElement("div");
+      childs.className = "childs";
+
+      node.childs.forEach((child) => {
+        renderCollection(child, childs, depth + 1);
+      });
+
+      parent.appendChild(item);
+      parent.appendChild(childs);
+    } else {
+      parent.appendChild(item);
     }
   }
+
+  document.addEventListener("click", () => {
+    if (currentDropdown) {
+      currentDropdown.classList.remove("show");
+      currentDropdown = null;
+    }
+  });
 
   document.getElementById("col-open-btn").addEventListener("click", () => {
     appToMain.callOpenCollection().then((collection) => {

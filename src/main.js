@@ -1,10 +1,10 @@
 const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const path = require("node:path");
 const fs = require("node:fs/promises");
-const Swal = require("sweetalert2");
 
 let appWindow;
 let collectionWindow;
+let getNameWindow;
 
 function createAppWindow() {
   appWindow = new BrowserWindow({
@@ -34,6 +34,37 @@ function createCollectionWindow() {
   collectionWindow.loadFile(
     "src/renderers/create-collection/create-collection.html"
   );
+}
+
+function createGetNameWindow(type) {
+  getNameWindow = new BrowserWindow({
+    width: 400,
+    height: 300,
+    parent: appWindow,
+    modal: true,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, "preloads/p-get-name.js"),
+    },
+  });
+
+  getNameWindow.loadFile("src/renderers/get-name/get-name.html", {
+    query: { type },
+  });
+}
+
+function openCreateFolderWindowHandler(event, path, type) {
+  if (getNameWindow) {
+    getNameWindow.focus();
+    return;
+  }
+
+  createGetNameWindow(type);
+
+  getNameWindow.on("closed", () => {
+    getNameWindow = null;
+  });
 }
 
 function getUrlHandler(event, request) {
@@ -68,6 +99,13 @@ function openCreateCollectionWindowHandler() {
 
   collectionWindow.on("closed", () => {
     collectionWindow = null;
+  });
+}
+
+function getFolderNameHandler(event, name) {
+  return new Promise((resolve) => {
+    console.log(`create ${name} folder`);
+    resolve(true);
   });
 }
 
@@ -127,6 +165,7 @@ function callOpenCollectionHandler() {
       });
 
       const collectionObj = await JSON.parse(content);
+      collectionObj.path = collectionDir;
 
       if (!collectionObj.name || !collectionObj.type) {
         alert("wrong config format");
@@ -201,6 +240,8 @@ app.whenReady().then(() => {
   );
   ipcMain.handle("call-open-collection", callOpenCollectionHandler);
   ipcMain.handle("submit-create", submitCreateCollectionHandler);
+  ipcMain.handle("open-create-folder-window", openCreateFolderWindowHandler);
+  ipcMain.handle("get-folder-name", getFolderNameHandler);
 
   createAppWindow();
 });
